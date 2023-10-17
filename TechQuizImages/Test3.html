@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spend time at Hogwarts and find out what magical creature you are</title>
+    
+</head>
+<body>
+    <h1 id ="questionSpace"></h1>
+
+
+<div id="mychoices">
+
+        
+      </div>
+      <input type="radio" name="choice" value="choice1" onclick = "optionChoice ()" >
+      <label for="choice1" id = "choice1"></label><br>
+        
+      </div>
+      <input type="radio"  name="choice" value="choice2" onclick = "optionChoice ()">
+      <label for="choice2"id = "choice2"></label><br>
+    
+      <input type="radio"  name="choice" value="choice3" onclick = "optionChoice ()">
+      <label for="choice3" id = "choice3"></label><br>
+
+      </div>
+      <input type="radio"  name="choice" value="choice4" onclick = "optionChoice ()">
+      <label for="choice4" id = "choice4"></label><br>
+    </div>
+
+
+      <button class="back-button" onclick="back()">Back</button>
+      <button class="next-button" onclick="next()">Next</button>
+  
+ 
+</body>
+</html>
+
+<script>
+
+        //Storing elements from the HTML into variables
+        var question = document.getElementById("question");
+        var questionspace = document.getElementById("questionSpace");
+        var choice1 = document.getElementById ("choice1") //Variable for choice1
+        var choice2 = document.getElementById ("choice2")
+        var choice3 = document.getElementById ("choice3")
+        var choice4 = document.getElementById ("choice4")
+        var selectedChoice =  document.getElementById("points");
+        var questionState = 0;
+
+
+     
+        var score = 0;
+        
+        
+        //Questions, choices and points.
+        var questionData = [
+    {
+        question: "1. You are in Diagon Alley, Once you buy your robes and books, you go to Magical Menagerie. Which animal are you taking to Hogwarts?",
+        choices: ["Rat", "Toad", "Owl", "Cat"],
+        points: [1, 2, 3, 4]
+    },
+    {
+        question: "2.You are on the train to Hogwarts, you have the option to buy some snacks, what do you get?",
+        choices:  ["Fizzing Whizbees", "Nothing, I am not hungry! ", "Bertie Bott's Every Flavour Beans ", "Chocolate Frogs"],
+        points: [1, 2, 3, 4]
+    },
+   
+    {
+        question: "3. You have arrived at Hogwarts, What house are you in?",
+        choices:  ["Slytherin", "Gryffindor", "Ravenclaw", "Hufflepuff"],
+        points: [1, 2, 3, 4]
+    },
+   
+    {
+        question: "4. You fit into your house perfectly! What is your first class?",
+        choices:  ["Charms with Professor Flitwick", "Transfiguration with Professor McGonagall", "Herbology with Professor Sprout", "Potions with Professor Snape"],
+        points: [1, 2, 3, 4]
+    },
+
+    {
+        question: "5. Who do you sit with?",
+        choices:  ["Luna Lovegood", "Draco Malfoy", "I focus better alone!", "Hermione Granger"],
+        points: [1, 2, 3, 4]
+    },
+
+    {
+        question: "6. You finish all your classes, walking into the Great Hall. You see dinner is ready, what are you going to eat?",
+        choices:  ["Salad", "Something savoury", "I’m not very hungry, ill just have a drink!", "No savoury, dessert only!"],
+        points: [1, 2, 3, 4]
+    },
+    {
+        question: "7.Great! The food was amazing! What are you going to do for the evening?",
+        choices:  ["Break Curfew with your new friends", "Have a late-night party in your dorm", "Visit the Library and finish your homework", "Go back to my common room to relax"],
+        points: [1, 2, 3, 4]
+    },
+    {
+        question: "8. You had a lot of fun on your first day, you wake up…",
+        choices: ["Tired, I want to sleep longer! ", "Starving!", "Happy! your pet cuddled up with you!", "Excited, I can’t wait to see what happens today!"],
+        points: [1, 2, 3, 4]
+    },
+    {
+        question: "9. A few months later…You quickly put on your uniform, walking down with your friends, and you decided to go Yule ball shopping at Hogsmeade! What will you wear?",
+        choices: ["A grey dress suite ", "A purple ball gown", "Black suite with a bow tie ", "A long green ball gown"],
+        points: [1, 2, 3, 4]
+    },
+    {
+        question: "10. Once you get your outfit, You decided to get some drinks from The Three Broomsticks, what do you order?",
+        choices: ["Firewhiskey", "Pumpkin juice", "Gillywater! I need to clear my mind!", "Butterbeer!"],
+        points: [1, 2, 3, 4]
+    },
+    {
+        question: "11. Once your drink arrives, you decide to…",
+        choices: ["Head back to Hogwarts.", "Stay at Three Broomsticks for a while, enjoying talking to friends.", "Go to Zonko's Joke Shop and buy something for future pranks.", "Go to Honeydukes to get sweets."],
+        points: [1, 2, 3, 4]
+    },
+    {
+        question: "12. The Day of the Yule Ball Arrives. You look amazing! Who do you spend the most time with?",
+        choices: ["Draco Malfoy and Vincent Crabbe", "Harry Potter and Ron Weasley", "Cedric Diggory and Neville Longbottom", "Hermione and Luna Lovegood"],
+        points: [1, 2, 3, 4]
+    },
+    {
+        question: "13. Once the Yule Ball is over, you…",
+        choices: ["Steal some food to take back!", "Go to the Slytherin common room for an after-party", "Head back to the dorms to relax", "Make your way to the Astronomy tower to star gaze"],
+        points: [1, 2, 3, 4]
+    },
+    {
+        question: "14. It is the end of the year, which means O.W.Ls are coming up! What do you decide to do?",
+        choices: ["I can study later! I’m confident I will pass!", "I might go grab some Gillywater, that way I can study better", "I should find someone to study with, it will be more fun!", "Study! I want to be prepared"],
+        points: [1, 2, 3, 4]
+    },
+    {
+        question: "15. Finally, your O.W.Ls are over! You passed! Time for the holidays! Where do you choose to stay?",
+        choices: ["I’ll stay at Malfoy Manor!", "I’ll stay with the Weasleys!", "Go home! I miss my family!", "I prefer to stay at Hogwarts"],
+        points: [1, 2, 3, 4]
+    },
+        ];
+
+        questionSpace.innerHTML = questionData[questionState]['question'];
+        choice1.innerHTML = questionData[questionState]['choices'][0];
+        choice2.innerHTML = questionData[questionState]['choices'][1];
+        choice3.innerHTML = questionData[questionState]['choices'][2];
+        choice4.innerHTML = questionData[questionState]['choices'][3];
+        
+        //This function changes to the next question when the next button is clicked. 
+        function update () {
+            if (questionState < questionData.length) {
+            questionState++;
+            questionSpace.innerHTML = questionData[questionState]['question'];
+            choice1.innerHTML = questionData[questionState]['choices'][0];
+            choice2.innerHTML = questionData[questionState]['choices'] [1];
+            choice3.innerHTML = questionData[questionState]['choices'] [2];
+            choice4.innerHTML = questionData[questionState]['choices'] [3];
+            
+
+        } else {
+            questionSpace.innerHTML = "You are a..."; //Add quiz resault code here 
+        }
+    }
+
+    function check () {
+            if (questionState > 0) {
+            questionState--;
+            questionSpace.innerHTML = questionData[questionState].question;
+            choice1.innerHTML = questionData[questionState]['choices'][0];
+            choice2.innerHTML = questionData[questionState]['choices'] [1];
+            choice3.innerHTML = questionData[questionState]['choices'] [2];
+            choice4.innerHTML = questionData[questionState]['choices'] [3];
+        } else { //Add quiz resault code here 
+        }
+    }
+
+         //The next function calls the update function
+         function next() {
+            update();
+            optionChoice()
+
+         }
+         function back() {
+            check();
+            optionChoice()
+
+         }
+         //points being added
+         function optionChoice () {
+        
+     
+            if ("choice1") {
+            score += 1;
+            } else if ("choice2") {
+            score += 2;
+            }else if ("choice3") {
+            score += 3;
+            }else if ("choice4") {
+            score += 4;
+        }
+    }
+
+
+
+</script>
+
+<style>
+   
+   body {
+    text-align: center;
+    color: rgb(253, 251, 255);
+    font-size: 70%;
+}
+
+.back-button {
+    margin: 10px 10x; /* Adjust the top and left margins for the "Back" button */
+    color: black;
+    background-color:rgb(246, 238, 198);
+  
+}
+   
+.next-button {
+    margin: 10px 10px; /* Adjust the top and left margins for the "Next" button */
+    color: black;
+    background-color:rgb(246, 238, 198);
+    margin-top: 30px 
+}
+
+    .choice1 {
+    position: absolute;
+    top: 130px;
+    left: 300px;
+    margin-left: 20px;
+}
+
+
+
+.choice2 {
+    position: absolute;
+    top: 130px;
+    left: 500px;
+    margin-left: 20px;
+    
+}
+.choice3 {
+    position: absolute;
+    top: 130px;
+    right: 400px;
+    margin-right: 20px;
+}
+
+.choice4 {
+    position: absolute;
+    top: 130px;
+    right: 500px;
+    margin-right: 100px;
+}
+
+#mychoices {
+margin-top: 250px;
+}
+
+body {
+background-image:url("magic-unusual-fairytale-palaces_87572-480.jpg");
+background-size: cover;
+}
+</style>
